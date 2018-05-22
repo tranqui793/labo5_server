@@ -2,16 +2,19 @@
 #define REQUESTHANDLER_H
 #include "request.h"
 #include "response.h"
-
-class RequestHandler
+#include <QThread>
+class RequestHandler:public QThread
 {
 private:
     Request request;
+    AbstractBuffer<Response>* responses;
     bool hasDebugLog;
 
 public:
-    RequestHandler(Request request, bool hasDebugLog): request(request), hasDebugLog(hasDebugLog) {}
+    RequestHandler(Request request,AbstractBuffer<Response>* responses, bool hasDebugLog):responses(responses), request(request), hasDebugLog(hasDebugLog) {}
+    void run(){
 
+    }
     Response handle();
 };
 
