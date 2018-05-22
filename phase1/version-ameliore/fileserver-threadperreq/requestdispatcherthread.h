@@ -14,9 +14,15 @@ public:
     }
     void run(){
         while(true){
-            RequestHandler* handler=new RequestHandler(requests->get(),responses,hasDebugLog);
-            handler->start();
+
+            if(hasDebugLog)
+                qDebug()<<"request processing starting";
+
+            Request request = requests->get();
+            RequestHandler* handler=new RequestHandler(request,responses,hasDebugLog);
             allHandlers.push_back(handler);
+            handler->start();
+
             for(RequestHandler* e:allHandlers){
                 if(e->isFinished())
                 {
@@ -25,7 +31,7 @@ public:
                 }
             }
             if(hasDebugLog)
-                qDebug()<<"request processing";
+                qDebug()<<"request processing finished";
         }
     }
 private:
