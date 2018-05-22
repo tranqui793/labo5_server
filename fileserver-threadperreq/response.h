@@ -4,8 +4,10 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include "request.h"
+#include "abstractbuffer.h"
 
-class Response {
+template<typename T>
+class Response : public AbstractBuffer <T>{
 private:
     Request request;
     QString response;
@@ -30,6 +32,13 @@ public:
 
     QString getResponse() {
         return response;
+    }
+
+    void put(T item){
+
+    }
+    T get(){
+
     }
 };
 #endif // RESPONSE_H

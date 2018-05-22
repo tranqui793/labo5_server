@@ -55,6 +55,8 @@
 #include <QMap>
 #include <QString>
 #include "responsedispatcherthread.h"
+#include "RequestDispatcherThread.h"
+
 #include "response.h"
 
 QT_FORWARD_DECLARE_CLASS(QWebSocketServer)
