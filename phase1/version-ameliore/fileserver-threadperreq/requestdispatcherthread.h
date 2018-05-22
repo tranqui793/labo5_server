@@ -1,6 +1,7 @@
 #ifndef REQUESTDISPATCHERTHREAD_H
 #define REQUESTDISPATCHERTHREAD_H
 #include <QThread>
+#include <QLinkedList>
 #include "requesthandler.h"
 #include "abstractbuffer.h"
 
@@ -15,13 +16,20 @@ public:
         while(true){
             RequestHandler* handler=new RequestHandler(requests->get(),responses,hasDebugLog);
             handler->start();
-
+            allHandlers.push_back(handler);
+            for(RequestHandler* e:allHandlers){
+                if(e->isFinished())
+                {
+                    e->deleteLater();
+                    allHandlers.removeOne(e);
+                }
+            }
             if(hasDebugLog)
                 qDebug()<<"request processing";
         }
     }
 private:
-
+    QLinkedList<RequestHandler*> allHandlers=new QLinkedList<RequestHandler*>();
     AbstractBuffer<Request>* requests;
     AbstractBuffer<Response>* responses;
     bool hasDebugLog;
