@@ -41,6 +41,6 @@ protected:
 
     QQueue<T> buffer;
     QSemaphore waitEmpty, waitFull;
-}
+};
 
 #endif // PRODUCERCONSUMERBUFFER_H

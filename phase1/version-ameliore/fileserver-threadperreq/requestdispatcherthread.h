@@ -13,7 +13,8 @@ public:
     }
     void run(){
         while(true){
-            RequestHandler* handler=(new RequestHandler(requests->get(),responses,hasDebugLog))->start();
+            RequestHandler* handler=new RequestHandler(requests->get(),responses,hasDebugLog);
+            handler->start();
 
             if(hasDebugLog)
                 qDebug()<<"request processing";

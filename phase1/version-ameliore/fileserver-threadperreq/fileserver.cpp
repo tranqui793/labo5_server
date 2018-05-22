@@ -51,16 +51,18 @@
 #include "QtWebSockets/qwebsocketserver.h"
 #include "QtWebSockets/qwebsocket.h"
 #include <QDebug>
+
 #include "filereader.h"
 #include "response.h"
 #include "request.h"
 #include "requestdispatcherthread.h"
 #include "producerconsumerbuffer.h"
 
+
 FileServer::FileServer(quint16 port, bool debug, QObject *parent) :
     QObject(parent),
     websocketServer(new QWebSocketServer(QStringLiteral("File Server"),
-                                            QWebSocketServer::NonSecureMode, this)),
+                                         QWebSocketServer::NonSecureMode, this)),
     hasDebugLog(debug)
 {
     // Creation du tampon de requetes

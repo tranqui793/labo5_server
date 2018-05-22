@@ -2,6 +2,8 @@
 #define REQUESTHANDLER_H
 #include "request.h"
 #include "response.h"
+#include "abstractbuffer.h"
+
 #include <QThread>
 class RequestHandler:public QThread
 {
