@@ -29,7 +29,7 @@ public:
         }
     }
 private:
-    QLinkedList<RequestHandler*> allHandlers=new QLinkedList<RequestHandler*>();
+    QLinkedList<RequestHandler*> allHandlers;
     AbstractBuffer<Request>* requests;
     AbstractBuffer<Response>* responses;
     bool hasDebugLog;

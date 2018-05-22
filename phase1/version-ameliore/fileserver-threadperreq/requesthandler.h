@@ -7,17 +7,18 @@
 #include <QThread>
 class RequestHandler:public QThread
 {
-private:
-    Request request;
-    AbstractBuffer<Response>* responses;
-    bool hasDebugLog;
 
 public:
     RequestHandler(Request request,AbstractBuffer<Response>* responses, bool hasDebugLog):responses(responses), request(request), hasDebugLog(hasDebugLog) {}
     void run(){
-
+        responses->put(this->handle());
     }
     Response handle();
+
+private:
+    Request request;
+    AbstractBuffer<Response>* responses;
+    bool hasDebugLog;
 };
 
 #endif // REQUESTHANDLER_H
