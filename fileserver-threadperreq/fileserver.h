@@ -55,7 +55,7 @@
 #include <QMap>
 #include <QString>
 #include "responsedispatcherthread.h"
-#include "RequestDispatcherThread.h"
+#include "requestdispatcherthread.h"
 
 #include "response.h"
 
@@ -82,7 +82,7 @@ public slots:
 private:
     QWebSocketServer *websocketServer;
     QMap<QString, QWebSocket *> clients;
-    RequestDispatcherThread* reqDispatcher; // TODO
+    requestdispatcherthread* reqDispatcher; // TODO
     ResponseDispatcherThread* respDispatcher;
     AbstractBuffer<Request>* requests;
     AbstractBuffer<Response>* responses;

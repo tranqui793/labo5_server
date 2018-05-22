@@ -1,8 +1,10 @@
 #ifndef REQUEST_H
 #define REQUEST_H
 #include <QString>
+#include"abstractbuffer.h"
 
-class Request {
+class Request : public AbstractBuffer<Request>
+{
 private:
     QString filePath;
     QString clientId;
@@ -18,6 +20,15 @@ public:
     QString getClientId() {
         return clientId;
     }
+
+    void put(Request item){
+
+    }
+    Request get(){
+
+    }
+
+
 };
 
 #endif // REQUEST_H

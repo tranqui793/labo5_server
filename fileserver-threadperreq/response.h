@@ -6,8 +6,7 @@
 #include "request.h"
 #include "abstractbuffer.h"
 
-template<typename T>
-class Response : public AbstractBuffer <T>{
+class Response : public AbstractBuffer <Response>{
 private:
     Request request;
     QString response;
@@ -34,11 +33,13 @@ public:
         return response;
     }
 
-    void put(T item){
+    void put(Response item){
 
     }
-    T get(){
+    Response get(){
 
     }
+
+
 };
 #endif // RESPONSE_H

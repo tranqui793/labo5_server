@@ -1,4 +1,4 @@
-#include "RequestDispatcherThread.h"
+#include "requestdispatcherthread.h"
 
 requestdispatcherthread::requestdispatcherthread()
 {
