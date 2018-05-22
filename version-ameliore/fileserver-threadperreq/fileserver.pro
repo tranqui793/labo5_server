@@ -23,7 +23,8 @@ HEADERS += \
     request.h \
     requesthandler.h \
     responsedispatcherthread.h \
-    requestdispatcherthread.h
+    requestdispatcherthread.h \
+    producerconsumerbuffer.h
 
 EXAMPLE_FILES += fileclient.html
 

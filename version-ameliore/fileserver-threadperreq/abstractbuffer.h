@@ -1,6 +1,8 @@
 #ifndef ABSTRACTBUFFER_H
 #define ABSTRACTBUFFER_H
 
+#include "qsemaphore.h"
+
 template<typename T>
 class AbstractBuffer {
 public:
