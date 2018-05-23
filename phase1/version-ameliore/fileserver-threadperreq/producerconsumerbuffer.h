@@ -33,7 +33,7 @@ public:
         T item;
         waitFull.acquire();
         item = buffer.dequeue();
-        waitFull.release();
+        waitEmpty.release();
         return item;
     }
 

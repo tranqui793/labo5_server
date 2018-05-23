@@ -26,10 +26,12 @@ public:
             for(RequestHandler* e:allHandlers){
                 if(e->isFinished())
                 {
-                    e->deleteLater();
                     allHandlers.removeOne(e);
+                    delete(e);
+                    break;
                 }
             }
+
             if(hasDebugLog)
                 qDebug()<<"request processing finished";
         }
