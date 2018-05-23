@@ -28,7 +28,6 @@ public:
                 {
                     allHandlers.removeOne(e);
                     delete(e);
-                    break;
                 }
             }
 
