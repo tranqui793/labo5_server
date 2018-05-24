@@ -9,7 +9,7 @@
 *   \authors    Adam Zouari et Oussama Lagha
 *   \date       15 Mai 2018
 *   \brief      Implementation de l'interface AbstractBuffer<T>
-*               afin de creer des buffer qui permetteront aux threads
+*               afin de creer des tampons qui permetteront aux threads
 *               de s'echanger des requetes et des reponses
 */
 template <typename T>

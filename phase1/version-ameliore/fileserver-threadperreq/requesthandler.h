@@ -8,18 +8,19 @@
 /** \class      RequestHandler
 *   \authors    Adam Zouari et Oussama Lagha
 *   \date       15 Mai 2018
-*   \brief      permetde traiter le request et envoi la réponse
-*               au buffer responses
+*   \brief      permet de traiter la requete et ajoute la réponse
+*               dans le buffer responses
 */
 class RequestHandler:public QThread
 {
 
 public:
     RequestHandler(Request request,AbstractBuffer<Response>* responses, bool hasDebugLog):responses(responses), request(request), hasDebugLog(hasDebugLog) {}
-    void run(){
-        responses->put(this->handle());//ajout de la response au buffer
-    }
     Response handle();
+    void run(){
+        //ajout dans le tampon de la response retourné par le handler
+        responses->put(this->handle());
+    }
 
 private:
     Request request;
