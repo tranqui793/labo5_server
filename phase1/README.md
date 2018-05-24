@@ -1,6 +1,6 @@
 # Laboratoire 5 : Serveur - Phase 1
 
-Auteurs : Oussama Lagha et Adam Zouari
+Auteurs : Oussama Lagha et Adam Zouari  
 Date : 11 Mai 2018
 
 ## Choix du mécanisme
