@@ -4,6 +4,7 @@
 
 Response RequestHandler::handle()
 {
+    //traitement de la request
     if (hasDebugLog)
         qDebug() << "Handling request '" << this->request.getFilePath() << "'...";
     FileReader reader(this->request.getFilePath(), this->hasDebugLog);

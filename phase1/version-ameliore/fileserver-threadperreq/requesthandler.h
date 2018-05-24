@@ -3,8 +3,14 @@
 #include "request.h"
 #include "response.h"
 #include "abstractbuffer.h"
-
 #include <QThread>
+
+/** \class      RequestHandler
+*   \authors    Adam Zouari et Oussama Lagha
+*   \date       15 Mai 2018
+*   \brief      permetde traiter le request et envoi la réponse
+*               au buffer responses
+*/
 class RequestHandler:public QThread
 {
 
