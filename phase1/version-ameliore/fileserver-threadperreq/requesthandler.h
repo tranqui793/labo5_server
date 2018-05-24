@@ -17,7 +17,7 @@ class RequestHandler:public QThread
 public:
     RequestHandler(Request request,AbstractBuffer<Response>* responses, bool hasDebugLog):responses(responses), request(request), hasDebugLog(hasDebugLog) {}
     void run(){
-        responses->put(this->handle());
+        responses->put(this->handle());//ajout de la response au buffer
     }
     Response handle();
 
