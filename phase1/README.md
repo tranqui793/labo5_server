@@ -1,6 +1,6 @@
 # Laboratoire 5 : Serveur - Phase 1
 
-Auteurs : Oussama Lagha et Adam Zouari
+Auteurs : Oussama Lagha et Adam Zouari  
 Date : 11 Mai 2018
 
 ## Choix du mécanisme
@@ -25,7 +25,7 @@ Nous avons donc créer ce thread dans `fileserver.cpp` :
 
 et nous le lançons `reqDispatcher->start();`
 
-Nous avons crée la classe `requestHandler` qui permettra à un thread de traiter une requête. Le traitement est effectué par la fonction `handle()` fournie. Et la `Reponse` que nous retourne cette fonction, est ajouté au tampon de réponse.
+Nous avons modifier la classe `requestHandler` qui permettra à un thread de traiter une requête. Desormais, la classe hérite de `QThread` et le traitement est effectué par la fonction `handle()` fournie. La `Reponse` que nous retourne cette fonction, est ajouté au tampon de réponse.
 
 
 ## Comparaison des perfomances
