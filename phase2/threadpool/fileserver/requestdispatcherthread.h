@@ -49,7 +49,7 @@ public:
                 // si il a terminé son execution
                 if(e->isFinished())
                 {
-                     // on le supprime de la liste
+                    // on le supprime de la liste
                     allHandlers.removeOne(e);
 
                     // et on le detruit

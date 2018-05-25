@@ -31,7 +31,10 @@ SOURCES += \
 
 HEADERS += \
     ../fileserver/threadpool.h \
-    tst_threadpool.h
+    tst_threadpool.h \
+    threadpool.h \
+    runnable.h \
+    threadpoolrunner.h
 
 INCLUDEPATH += \
     ../fileserver

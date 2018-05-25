@@ -23,7 +23,7 @@ public:
         waitEmpty.release();
     }
 
-    virtual void put(T item){
+     void put(T item){
         waitEmpty.acquire();
         buffer.enqueue(item);
         waitFull.release();
