@@ -18,6 +18,7 @@ public:
     RequestHandler(Request request,AbstractBuffer<Response>* responses, bool hasDebugLog):responses(responses), request(request), hasDebugLog(hasDebugLog) {}
     Response handle();
     void run(){
+
         //ajout dans le tampon de la response retourné par le handler
         responses->put(this->handle());
     }

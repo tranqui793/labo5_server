@@ -57,11 +57,7 @@
 #include "request.h"
 #include "requestdispatcherthread.h"
 #include "producerconsumerbuffer.h"
-#include "producerconsumerbuffer2.h"
 
-#include "multipleproducerconsumerbuffer.h"
-
-#define BUFFSIZE 1024
 
 FileServer::FileServer(quint16 port, bool debug, QObject *parent) :
     QObject(parent),
@@ -71,15 +67,9 @@ FileServer::FileServer(quint16 port, bool debug, QObject *parent) :
 {
     // Creation du tampon de requetes
     requests = new producerconsumerbuffer<Request>();
-    //requests = new multipleproducerconsumerbuffer<Request>(BUFFSIZE);
-    //requests = new producerconsumerbuffer2<Request>();
-
 
     // Creation du tampon de reponses
     responses = new producerconsumerbuffer<Response>();
-    //responses = new multipleproducerconsumerbuffer<Response>(BUFFSIZE);
-    //responses = new producerconsumerbuffer2<Response>();
-
 
     // Creation des dispatcher de requetes/reponses et lancement dans chacun un thread
     reqDispatcher = new requestdispatcherthread(requests,responses,hasDebugLog);
