@@ -23,13 +23,13 @@ public:
         waitEmpty.release();
     }
 
-     void put(T item){
+    void put(T item){
         waitEmpty.acquire();
         buffer.enqueue(item);
         waitFull.release();
     }
 
-    virtual T get (){
+    T get (){
         T item;
         waitFull.acquire();
         item = buffer.dequeue();
