@@ -1,9 +1,8 @@
 #ifndef PRODUCERCONSUMERBUFFER_H
 #define PRODUCERCONSUMERBUFFER_H
 
-#include "QSemaphore"
-#include "QQueue"
 #include "abstractbuffer.h"
+#include "hoaremonitor.h"
 
 /** \class      Producerconsumerbuffer
 *   \authors    Adam Zouari et Oussama Lagha
@@ -13,34 +12,58 @@
 *               de s'echanger des requetes et des reponses
 */
 template <typename T>
-class producerconsumerbuffer : public AbstractBuffer<T>
+class producerconsumerbuffer : public AbstractBuffer<T>,public HoareMonitor
 {
 
 public:
 
-    producerconsumerbuffer(){
-        // Pour autoriser l'arrivée d'une requete/reponse
-        waitEmpty.release();
+    /**
+     * \brief constructeur du tampon
+     * \param size taille maximal du tampon
+     */
+    producerconsumerbuffer(unsigned size):size(size){
+        if((elements = new T[size]) != 0)
+            head = tail = currentSize = 0;
     }
 
+    /**
+     * \brief ajout element au tampon
+     * \param item Item a ajouter au tampon
+     */
     void put(T item){
-        waitEmpty.acquire();
-        buffer.enqueue(item);
-        waitFull.release();
+        monitorIn();
+        if (currentSize == size)
+            wait(notFull);
+        currentSize += 1;
+        elements[head] = item;
+        head = (head + 1) % N;
+        signal(notEmpty);
+        monitorOut();
     }
 
+    /**
+     * \brief recupere un element du tampon
+     */
     T get (){
         T item;
-        waitFull.acquire();
-        item = buffer.dequeue();
-        waitEmpty.release();
+        monitorIn();
+        if (size == 0) {
+            wait(&notEmpty);
+        }
+        item = elements[tail];
+        size -= 1;
+        tail = (tail + 1) % size;
+        signal(notFull);
+        monitorOut();
         return item;
     }
 
 protected:
+    T *elements; //
+    int head,tail,currentSize,size;//
 
-    QQueue<T> buffer;
-    QSemaphore waitEmpty, waitFull;
+    Condition notFull, notEmpty;  //
+
 };
 
 #endif // PRODUCERCONSUMERBUFFER_H
