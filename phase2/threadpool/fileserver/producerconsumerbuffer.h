@@ -34,7 +34,6 @@ public:
      * \brief ajout element au tampon
      * \param item Item a ajouter au tampon
      */
-
     virtual void put(T item){
 
         mutex.acquire();
@@ -48,6 +47,17 @@ public:
         mutex.release();
         waitFull.release();
 
+=======
+    void put(T item){
+        monitorIn();
+        if (currentSize == size)
+            wait(notFull);
+        currentSize += 1;
+        elements[head] = item;
+        head = (head + 1) % size;
+        signal(notEmpty);
+        monitorOut();
+>>>>>>> Stashed changes
     }
 
     /**
@@ -61,6 +71,19 @@ public:
         item = buffer.dequeue();
         waitEmpty.release();
         return item;
+    }
+
+    bool tryPut(T item){
+<<<<<<< Updated upstream
+=======
+
+    }
+
+protected:
+    T *elements; //
+    int head,tail,currentSize,size;//
+>>>>>>> Stashed changes
+
     }
 
 protected:

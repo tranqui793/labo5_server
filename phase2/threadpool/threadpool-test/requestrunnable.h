@@ -1,17 +1,20 @@
-#ifndef THREADPOOLRUNNER_H
-#define THREADPOOLRUNNER_H
+#ifndef REQUESTRUNNABLE_H
+#define REQUESTRUNNABLE_H
 
 #include "runnable.h"
 
-class ThreadPoolRunner : public Runnable {
+class RequestRunnable : public Runnable {
 
 public:
-    ThreadPoolRunner(Runnable* runnable){}
+    RequestRunnable(Runnable* runnable){}
 
 
+    ~RequestRunnable(){
 
+    }
 
 
 };
+#endif // REQUESTRUNNABLE_H
 
-#endif // THREADPOOLRUNNER_H
+#endif // REQUESTRUNNABLE_H
