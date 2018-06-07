@@ -34,7 +34,7 @@ HEADERS += \
     tst_threadpool.h \
     threadpool.h \
     runnable.h \
-    threadpoolrunner.h
+    requestrunnable.h
 
 INCLUDEPATH += \
     ../fileserver
