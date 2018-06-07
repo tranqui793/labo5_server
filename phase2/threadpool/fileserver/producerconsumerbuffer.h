@@ -21,63 +21,55 @@ public:
      * \param size taille maximal du tampon
      */
     producerconsumerbuffer(unsigned size){
-        mutex.release();
+        mutex.release(size);
+        waitEmpty.release(size);
         nbElements = 0;
-        nbWaitingConso = 0;
         bufferSize = size;
     }
-
+    /**
+     * \brief destructeur
+     */
+    virtual ~producerconsumerbuffer(){}
     /**
      * \brief ajout element au tampon
      * \param item Item a ajouter au tampon
      */
-    virtual ~producerconsumerbuffer(){}
+
     virtual void put(T item){
+
         mutex.acquire();
-        if (nbElements == bufferSize) { //si le tampon et plein on libére la mutex
+        if (nbElements==bufferSize) {       //si le tampon est plein on sort sans rien faire
             mutex.release();
             return;
         }
-        //si le tampon n'est pas plein on ajoute au tampon et on réveil un consomateur en attente
+        waitEmpty.acquire();
+        nbElements++;
         buffer.enqueue(item);
-        nbElements ++;
-        if (nbWaitingConso > 0) {
-            nbWaitingConso -= 1;
-            waitConso.release();
-        }
-        else {
-            mutex.release();
-        }
+        mutex.release();
+        waitFull.release();
+
     }
 
     /**
      * \brief recupere un element du tampon
      */
     virtual T get (){
+
         T item;
-        mutex.acquire();
-        if (nbElements == 0) {  //si le tampon est vide les consomateurs doivent attendre
-            nbWaitingConso += 1;
-            mutex.release();
-            waitConso.acquire();
-            item=buffer.dequeue;
-            nbElements --;
-        }
-        else {  //dans le cas ou le tampon contient des elements
-            item=buffer.dequeue;
-            nbElements --;
-            mutex.release();
-        }
+        waitFull.acquire();
+        nbElements--;
+        item = buffer.dequeue();
+        waitEmpty.release();
         return item;
     }
 
 protected:
-    QQueue<T> buffer;   //tampon des elements
-    int nbElements,     //nombre d'element dans le tampon(taille courant du tampon)
-    bufferSize; //taille max du tampon
-    QSemaphore mutex,   //permet de protégé la section critique
-    waitConso;  //permet d'attendre si le tampon est vide
-    unsigned nbWaitingConso;    //nombre de consomateurs en attente
+    QQueue<T> buffer;           //tampon des elements
+    int nbElements,             //nombre d'element dans le tampon(taille courant du tampon)
+    bufferSize;                 //taille max du tampon
+   QSemaphore waitEmpty,        //permet d'attendre son tour pour ajouter dans le tampon
+   waitFull,                    //permet d'attendre si le tampon est vide
+   mutex;                       //permet de protégé e la section critique
 };
 
 #endif // PRODUCERCONSUMERBUFFER_H
