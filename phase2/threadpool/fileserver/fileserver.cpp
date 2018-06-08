@@ -66,10 +66,10 @@ FileServer::FileServer(quint16 port, bool debug, QObject *parent) :
     hasDebugLog(debug)
 {
     // Creation du tampon de requetes
-    requests = new producerconsumerbuffer<Request>();
+    requests = new producerconsumerbuffer<Request>(4);
 
     // Creation du tampon de reponses
-    responses = new producerconsumerbuffer<Response>();
+    responses = new producerconsumerbuffer<Response>(4);
 
     // Creation des dispatcher de requetes/reponses et lancement dans chacun un thread
     reqDispatcher = new requestdispatcherthread(requests,responses,hasDebugLog);
@@ -115,7 +115,9 @@ void FileServer::processTextMessage(QString message)
         qDebug() << "Message received:" << message;
     if (pClient) {
         Request req(message, pClient->origin());
-        requests->put(req);
+        if(!requests->tryPut(req)){
+            pClient->sendTextMessage(Response(req,"server overloaded,trylater").toJson());
+        }
     }
 }
 

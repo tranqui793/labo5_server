@@ -2,6 +2,7 @@
 #define PRODUCERCONSUMERBUFFER_H
 
 #include "abstractbuffer.h"
+#include <QQueue>
 
 /** \class      Producerconsumerbuffer
 *   \authors    Adam Zouari et Oussama Lagha
@@ -36,30 +37,22 @@ public:
      */
     virtual void put(T item){
 
-        mutex.acquire();
-        if (nbElements==bufferSize) {       //si le tampon est plein on sort sans rien faire
-            mutex.release();
-            return;
-        }
         waitEmpty.acquire();
         nbElements++;
         buffer.enqueue(item);
-        mutex.release();
         waitFull.release();
-
-=======
-    void put(T item){
-        monitorIn();
-        if (currentSize == size)
-            wait(notFull);
-        currentSize += 1;
-        elements[head] = item;
-        head = (head + 1) % size;
-        signal(notEmpty);
-        monitorOut();
->>>>>>> Stashed changes
     }
+    virtual bool tryPut(T item){
+        bool res = false;
+        mutex.acquire();
 
+        if (nbElements < bufferSize) {       //si le tampon est plein on sort sans rien faire
+            put(item);
+            res = true;
+        }
+        mutex.release();
+        return res;
+    }
     /**
      * \brief recupere un element du tampon
      */
@@ -73,18 +66,6 @@ public:
         return item;
     }
 
-    bool tryPut(T item){
-<<<<<<< Updated upstream
-=======
-
-    }
-
-protected:
-    T *elements; //
-    int head,tail,currentSize,size;//
->>>>>>> Stashed changes
-
-    }
 
 protected:
     QQueue<T> buffer;           //tampon des elements

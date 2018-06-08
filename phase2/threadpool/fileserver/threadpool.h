@@ -34,11 +34,11 @@ public:
     */
     void run(){
 
-        while(true){
+        while(getIsWorking()){
             mutex.lock();
-
+            request->run();
+            //on met isWorking a false quand il fini le run de la request
             isWorking = false;
-
             mutex.unlock();
         }
     }
@@ -102,7 +102,6 @@ public:
 
         mutex.lock();
         int id = 0;
-
         // si il y a encore des threads disponible
         if(currentThreadCount < maxThreadCount){
 

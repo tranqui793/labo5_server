@@ -4,6 +4,7 @@
 #include <QLinkedList>
 #include "requesthandler.h"
 #include "abstractbuffer.h"
+#include "threadpool.h"
 
 /** \class      requestdispatcherthread
 *   \authors    Adam Zouari et Oussama Lagha
@@ -18,8 +19,10 @@ class requestdispatcherthread : public QThread
 public:
     requestdispatcherthread(AbstractBuffer<Request>* requests,AbstractBuffer<Response>* responses,bool hasDebugLog)
         : hasDebugLog(hasDebugLog),responses(responses),requests(requests){
+        threadpool = new ThreadPool(4);
         if (hasDebugLog)
             qDebug() << "Created request dispatcher thread";
+
     }
 
     void run(){
@@ -38,29 +41,12 @@ public:
             RequestHandler* handler = new RequestHandler(request,responses,hasDebugLog);
 
             // on ajoute chaque handler dans une liste
-            allHandlers.push_back(handler);
+            threadpool->start(handler);
 
-            // lancement du traitement de la request dans un thread dédié
-            handler->start();
-
-            // on parcours la liste des thread handlers qui tourne
-            for(RequestHandler* e : allHandlers){
-
-                // si il a terminé son execution
-                if(e->isFinished())
-                {
-                    // on le supprime de la liste
-                    allHandlers.removeOne(e);
-
-                    // et on le detruit
-                    delete(e);
-                    break;
-                }
-            }
         }
     }
 private:
-    QLinkedList<RequestHandler*> allHandlers;
+    ThreadPool *threadpool;
     AbstractBuffer<Request>* requests;
     AbstractBuffer<Response>* responses;
     bool hasDebugLog;

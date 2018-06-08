@@ -10,6 +10,7 @@ public:
     virtual T get() = 0;
     virtual bool tryPut(T item)= 0;
 
+
 };
 
 #endif // ABSTRACTBUFFER_H
