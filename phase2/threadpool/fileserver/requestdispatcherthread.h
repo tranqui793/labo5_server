@@ -1,3 +1,4 @@
+
 #ifndef REQUESTDISPATCHERTHREAD_H
 #define REQUESTDISPATCHERTHREAD_H
 #include <QThread>
@@ -21,7 +22,8 @@ public:
         : hasDebugLog(hasDebugLog),responses(responses),requests(requests)
     {
         // creation du thread pool avec comme taille le nombre de processeurs logiques de la machine
-        threadpool = new ThreadPool(QThread::idealThreadCount());
+        int sizePool = QThread::idealThreadCount();
+        threadpool = new ThreadPool(sizePool);
         if (hasDebugLog)
             qDebug() << "Created request dispatcher thread";
 

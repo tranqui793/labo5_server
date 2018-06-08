@@ -61,15 +61,14 @@
 
 FileServer::FileServer(quint16 port, bool debug, QObject *parent) :
     QObject(parent),
-    websocketServer(new QWebSocketServer(QStringLiteral("File Server"),
-                                         QWebSocketServer::NonSecureMode, this)),
+    websocketServer(new QWebSocketServer(QStringLiteral("File Server"),QWebSocketServer::NonSecureMode, this)),
     hasDebugLog(debug)
 {
     // Creation du tampon de requetes
-    requests = new producerconsumerbuffer<Request>(4);
+    requests = new producerconsumerbuffer<Request>(512);
 
     // Creation du tampon de reponses
-    responses = new producerconsumerbuffer<Response>(4);
+    responses = new producerconsumerbuffer<Response>(512);
 
     // Creation des dispatcher de requetes/reponses et lancement dans chacun un thread
     reqDispatcher = new requestdispatcherthread(requests,responses,hasDebugLog);

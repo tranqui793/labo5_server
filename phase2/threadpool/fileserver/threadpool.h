@@ -43,6 +43,8 @@ public:
             //on met isWorking a false quand il fini le run de la request
             isWorking = false;
 
+            delete request;
+
             // et on reveille un worker
             waitWorker->wakeOne();
             waitWork->wait(&mutex);

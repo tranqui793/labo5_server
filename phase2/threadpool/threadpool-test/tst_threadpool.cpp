@@ -56,7 +56,7 @@ void ThreadpoolTest::testCase1()
         QVERIFY2(i.value() == false, "Failed");
     }
 
-    QVERIFY2(startingTime.msecsTo(endingTime) < (RUNTIMEINMS + 5), "Too long execution time");
+    QVERIFY2(startingTime.msecsTo(endingTime) < (RUNTIMEINMS + 30), "Too long execution time");
 
     QVERIFY2(startingTime.msecsTo(endingTime) > (RUNTIMEINMS - 2), "Too short execution time");
 }
