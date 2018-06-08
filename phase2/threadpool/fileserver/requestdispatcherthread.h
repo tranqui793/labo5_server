@@ -18,8 +18,10 @@ class requestdispatcherthread : public QThread
 
 public:
     requestdispatcherthread(AbstractBuffer<Request>* requests,AbstractBuffer<Response>* responses,bool hasDebugLog)
-        : hasDebugLog(hasDebugLog),responses(responses),requests(requests){
-        threadpool = new ThreadPool(4);
+        : hasDebugLog(hasDebugLog),responses(responses),requests(requests)
+    {
+        // creation du thread pool avec comme taille le nombre de processeurs logiques de la machine
+        threadpool = new ThreadPool(QThread::idealThreadCount());
         if (hasDebugLog)
             qDebug() << "Created request dispatcher thread";
 
@@ -40,7 +42,7 @@ public:
 
             RequestHandler* handler = new RequestHandler(request,responses,hasDebugLog);
 
-            // on ajoute chaque handler dans une liste
+            // Donne le handler au thread pool afin qu'il cree un thread ou qu'il le recycle
             threadpool->start(handler);
 
         }
