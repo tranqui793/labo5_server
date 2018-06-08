@@ -25,8 +25,9 @@ public:
     *   \brief          Constructeur de Worker
     *   \param request  Tache attribué au thread
     */
-    Worker(Runnable* request): request(request), isWorking(true){}
-    // fait appel au run de requestrunnable
+    Worker(Runnable* request, QWaitCondition *waitWorker): request(request), waitWorker(waitWorker), isWorking(true){
+        waitWork = new QWaitCondition;
+    }
 
 
     /**
@@ -34,11 +35,16 @@ public:
     */
     void run(){
 
-        while(true){
+        while(isWorking){
             mutex.lock();
-
+            request->run();
+            //on met isWorking a false quand il fini le run de la request
             isWorking = false;
+            delete request;
 
+            // et on reveille un worker
+            waitWorker->wakeOne();
+            waitWork->wait(&mutex);
             mutex.unlock();
         }
     }
@@ -58,6 +64,7 @@ public:
         mutex.lock();
         isWorking = true;
         this->request = request;
+        waitWork->wakeOne();
         mutex.unlock();
     }
 
@@ -73,8 +80,10 @@ public:
 protected:
 
     Runnable* request;       // requete à traitée
-    bool isWorking;         // flag de statut (attente ou traite une requete)
-    QMutex mutex;
+    bool isWorking;          // flag de statut (attente ou traite une requete)
+    QMutex mutex;              // permet de proteger les section critiques
+    QWaitCondition* waitWorker; // permet l'attente d'un worker
+    QWaitCondition* waitWork;   // permet l'attente d'une tache
 };
 
 /** \class      ThreadPool
@@ -90,8 +99,9 @@ public:
     *   \brief          Constructeur de ThreadPool
     *   \param maxThreadCount Nombre de threads que le pool gère
     */
-    ThreadPool(int maxThreadCount) : currentThreadCount(0), maxThreadCount(maxThreadCount){
+    ThreadPool(int maxThreadCount) : currentThreadCount(0), maxThreadCount(maxThreadCount), id(0){
         workers.reserve(maxThreadCount);
+        waitWorker = new QWaitCondition;
     }
 
     /**
@@ -101,14 +111,12 @@ public:
     void start(Runnable* request){
 
         mutex.lock();
-        int id = 0;
-
         // si il y a encore des threads disponible
         if(currentThreadCount < maxThreadCount){
 
 
             // on cree un thread worker en lui passant la requete
-            Worker* worker = new Worker(request);
+            Worker* worker = new Worker(request,waitWorker);
 
             // on l'ajoute dans la liste de worker
             workers.push_back(worker);
@@ -116,25 +124,31 @@ public:
             // on incremente le nombre de threads utilisés
             currentThreadCount++;
 
+
             // et on lance le traitement
             workers.at(id)->start();
+            id++;
 
-        }else if ((id = getIdOfWaitingWorker()) != -1){     // recyclage d'un thread
+
+        }else if ((id = getIdOfwaitWorkWorker()) != -1){     // recyclage d'un thread
 
             workers.at(id)->setWork(request);
 
         } else{     // aucun thread libre
 
             // attend qu'un worker soit disponible pour lui attribuer une tache
-            waitWorker.wait(&mutex);
-            id = getIdOfWaitingWorker();
+            waitWorker->wait(&mutex);
+            id = getIdOfwaitWorkWorker();
             workers.at(id)->setWork(request);
 
         }
         mutex.unlock();
     }
 
-    int getIdOfWaitingWorker(){
+    /**
+    *   \brief     Retourne la position d'un worker disponible
+    */
+    int getIdOfwaitWorkWorker(){
 
         for(int i = 0; i < workers.size(); i++){
             if(!(workers.at(i)->getIsWorking())){
@@ -156,10 +170,11 @@ public:
 
 protected:
 
+    int id ;
     int maxThreadCount,           // nombre max de thread possible dans le pool
     currentThreadCount;           // nombre de thread utilisé
     QVector<Worker*> workers;     // liste de worker
-    QWaitCondition waitWorker;    // permet l'attente d'un worker
+    QWaitCondition* waitWorker;    // permet l'attente d'un worker
     QMutex mutex;                 // permet de proteger les sections critique
 
 };

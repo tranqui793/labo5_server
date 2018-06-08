@@ -9,13 +9,13 @@
 /** \class      RequestHandler
 *   \authors    Adam Zouari et Oussama Lagha
 *   \date       15 Mai 2018
-*   \brief      permet de traiter la requete et ajoute la réponse
-*               dans le buffer responses
+*   \brief      Modification de la version de l'etape 1, maintenant herite de Runnable
 */
-class RequestHandler:public Runnable
+class RequestHandler : public Runnable
 {
 
 public:
+
     RequestHandler(Request request,AbstractBuffer<Response>* responses, bool hasDebugLog):responses(responses), request(request), hasDebugLog(hasDebugLog) {}
     Response handle();
     void run(){

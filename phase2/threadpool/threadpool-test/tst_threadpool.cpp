@@ -47,7 +47,7 @@ void ThreadpoolTest::testCase1()
         pool.start(runnable);
     }
 
-    QThread::usleep(1000 * (RUNTIMEINMS + 5));
+    QThread::usleep(1000 * (RUNTIMEINMS + 10));
 
     // Check that every runnable is really finished
     QMapIterator<QString, bool> i(m_runningState);

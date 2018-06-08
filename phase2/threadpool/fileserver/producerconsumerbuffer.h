@@ -7,9 +7,7 @@
 /** \class      Producerconsumerbuffer
 *   \authors    Adam Zouari et Oussama Lagha
 *   \date       15 Mai 2018
-*   \brief      Implementation de l'interface AbstractBuffer<T>
-*               afin de creer des tampons qui permetteront aux threads
-*               de s'echanger des requetes et des reponses
+*   \brief      Modification du buffer de l'etape 1 afin de gerer le nombre max de requetes dans le tampon
 */
 template <typename T>
 class producerconsumerbuffer : public AbstractBuffer<T>
@@ -31,6 +29,8 @@ public:
      * \brief destructeur
      */
     virtual ~producerconsumerbuffer(){}
+
+
     /**
      * \brief ajout element au tampon
      * \param item Item a ajouter au tampon
@@ -42,6 +42,11 @@ public:
         buffer.enqueue(item);
         waitFull.release();
     }
+
+    /**
+     * \brief  essaye d'ajouter un element au tampon
+     * \param item element a ajouter
+     */
     virtual bool tryPut(T item){
         bool res = false;
         mutex.acquire();

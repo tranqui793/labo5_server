@@ -4,8 +4,10 @@
 #include <QString>
 #include <QtTest>
 #include <QTime>
-
+#include "iostream"
 #include "threadpool.h"
+
+using namespace std;
 
 #define RUNTIME 10000
 #define RUNTIMEINMS 10
@@ -102,8 +104,12 @@ public:
 
     //! Method ran by the thread of the pool
     virtual void run() {
+
         QThread::usleep(RUNTIME);
+        //cout << "depart runnable +" <<qPrintable(m_id)<< endl;
         m_tester->runnableTerminated(m_id);
+        //cout << "fin runnable +" <<qPrintable(m_id)<< endl;
+
     }
 
     ///
