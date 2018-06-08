@@ -48,9 +48,9 @@ public:
         }
     }
 private:
-    ThreadPool *threadpool;
-    AbstractBuffer<Request>* requests;
-    AbstractBuffer<Response>* responses;
-    bool hasDebugLog;
+    ThreadPool *threadpool;                 //une piscine des threads
+    AbstractBuffer<Request>* requests;      //tampon qui contient tt les requetes a traiter
+    AbstractBuffer<Response>* responses;    //tampon qui contient tt les reponses traiter par le serveur
+    bool hasDebugLog;                       // permet de tester si on peut affché un msg
 };
 #endif // REQUESTDISPATCHERTHREAD_H

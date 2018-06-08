@@ -115,6 +115,8 @@ void FileServer::processTextMessage(QString message)
         qDebug() << "Message received:" << message;
     if (pClient) {
         Request req(message, pClient->origin());
+        //on test si le serveur peut accepté des requests encore ou non
+        //si il peut pas on affcihe un msg d'erreur
         if(!requests->tryPut(req)){
             pClient->sendTextMessage(Response(req,"server overloaded,trylater").toJson());
         }
