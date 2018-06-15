@@ -1,0 +1,4 @@
+#ifndef HOAREMONITOR_H
+#define HOAREMONITOR_H
+
+#endif // HOAREMONITOR_H

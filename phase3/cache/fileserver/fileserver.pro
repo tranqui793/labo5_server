@@ -30,7 +30,8 @@ HEADERS += \
     response.h \
     responsedispatcherthread.h \
     runnable.h \
-    threadpool.h
+    threadpool.h \
+    hoaremonitor.h
 
 
 EXAMPLE_FILES += fileclient.html
