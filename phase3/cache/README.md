@@ -18,9 +18,23 @@ On a commencé par implémenter la ReadWritelock qui permet de gérer l'acces a 
 Ensuite, on a compléter la fonction run de la classe interne InvalidationTimer qui permet de verifier périodiquement (selon `invalidationdelaysec`) si la données et toujours supposée correcte (selon `staledelaysec`). Après on a poursuivi avec la classe ReadWritercache qui a deux fonctions nécessaire tryGetReponse et putResponse, la première nous permet de récupérer la réponse dans le cache si elle s'y trouve, et la deuxième de l'ajouter sinon.
 
 
-adapter code dispatcherthread
+adapter code dispatcherthread:
 
-adapter code requesthandler
+Afin d'adopter la partie requestdispatcherthread, on avait instancié un thread readwritecache et on le 
+
+adapter code requesthandler:
+
+
+On avait choisi dés la premiére partie d'omplémenter le request handler comme un thread donc, pour cette partie on avait juste besoin d'ajouter le code donner dans la donnée et le modifier pour qu'il soit soit conforme avec notre implémentation.on a remplacer ce bout de code
+```
+resp = RequestHandler(req, hasDebugLog).handle();
+cache->putResponse(resp);```
+par 
+```
+resp = this->handle();
+cache->putResponse(resp);  
+```
+
 
 # Reponses aux questions
 
