@@ -26,15 +26,10 @@ ReaderWriterCache::~ReaderWriterCache()
 *   \param response permet l'ajout au map
 */
 void ReaderWriterCache::putResponse(Response &response) {
-<<<<<<< Updated upstream
     lock.lockWriting();
         //pour chaque nouvelle requete on cree une struct avec le time courrant
 
     TimestampedResponse response_struct(response,timer->time);
-=======
-
-}
->>>>>>> Stashed changes
 
     //l'ajout dans le cache
     //map prend string et TimestampedResponse donc on peut pas stockee la request instance on met le path
@@ -52,11 +47,11 @@ Option<Response> ReaderWriterCache::tryGetCachedResponse(Request &request) {
 
     //on essaye de recuperer l'element
 
-   QHash<QString,TimestampedResponse>::const_iterator i= map.find(request.getFilePath());
+   QHash<QString,TimestampedResponse>::iterator i= map.find(request.getFilePath());
     if(i !=map.end()){
         //si on a une response on met a jour le le timerstamp et on recupere la response
-        res=Option<Response>::some(i.value());
-        i.timestamp=timer->time;
+        res=Option<Response>::some(i->response);
+        i->timestamp=timer->time;
     }
 
 

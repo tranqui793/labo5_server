@@ -15,14 +15,14 @@ class HoareMonitor
 {
 protected:
 
-    HoareMonitor();
+    HoareMonitor(): monitorMutex(1), monitorSignale(0), monitorNbSignale(0) {}
 
     class Condition
     {
         friend HoareMonitor;
 
     public:
-        Condition();
+        Condition(): waitingSem(0), nbWaiting(0) {}
 
         // Test si il y des threads en attente sur la condition
         bool notEmpty(){return nbWaiting;}
@@ -36,20 +36,38 @@ protected:
      * This function has to be called at the beginning of each function being
      * an entry point to the monitor.
      */
-    void monitorIn();
+    void monitorIn(){
+
+        monitorMutex.acquire();
+
+    }
 
     /**
      * This function has to be called at the end of each function being
      * an entry point to the monitor.
      */
-    void monitorOut();
+    void monitorOut(){
+
+        if (monitorNbSignale > 0)
+                monitorSignale.release();
+            else
+                monitorMutex.release();
+    }
 
     /**
      * This function implements the waiting on a condition, as defined by Hoare.
      * When the thread is waken by a signal, it continues with the mutual
      * exclusion.
      */
-    void wait(Condition &cond);
+    void wait(Condition &cond){
+        cond.nbWaiting += 1;
+           if (monitorNbSignale > 0)
+               monitorSignale.release();
+           else
+               monitorMutex.release();
+           cond.waitingSem.acquire();
+           cond.nbWaiting -= 1;
+    }
 
     /**
      * This function implements the signaling of a condition, as defined by
@@ -57,7 +75,14 @@ protected:
      * but if there is one the thread calling signal is suspended, waiting for
      * the other one to finish.
      */
-    void signal(Condition &cond);
+    void signal(Condition &cond){
+        if (cond.nbWaiting>0) {
+                monitorNbSignale += 1;
+                cond.waitingSem.release();
+                monitorSignale.acquire();
+                monitorNbSignale -= 1;
+            }
+    }
 
 private:
 
