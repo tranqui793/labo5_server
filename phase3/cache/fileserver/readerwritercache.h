@@ -42,6 +42,7 @@ private:
 		void run() {
 
             while(true){
+                if(isInterruptionRequested()){break;}
                 QHash<QString, TimestampedResponse>::iterator iterator;       //iterator pour map
                 for(iterator = cache->map.begin(); iterator != cache->map.end(); ){
                     struct TimestampedResponse value = iterator.value();
