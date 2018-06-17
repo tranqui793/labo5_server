@@ -4,6 +4,7 @@
 #include "response.h"
 #include "abstractbuffer.h"
 #include "runnable.h"
+#include "readerwritercache.h"
 #include <QThread>
 
 /** \class      RequestHandler
@@ -16,7 +17,8 @@ class RequestHandler : public Runnable
 
 public:
 
-    RequestHandler(Request request,AbstractBuffer<Response>* responses, bool hasDebugLog):responses(responses), request(request), hasDebugLog(hasDebugLog) {}
+    RequestHandler(Request request,AbstractBuffer<Response>* responses, bool hasDebugLog, ReaderWriterCache* cache)
+        :responses(responses), request(request), hasDebugLog(hasDebugLog), cache(cache) {}
 /**
 *   \brief  permet de traiter la requete
 */
@@ -26,8 +28,16 @@ public:
 */
     void run(){
 
-        //ajout dans le tampon de la response retourné par le handler
-        responses->put(this->handle());
+        Response resp;
+        Option<Response> cachedResponse = cache->tryGetCachedResponse(request);
+        if (cachedResponse.hasValue()) {
+            resp = cachedResponse.value();
+        } else {
+            resp = this->handle();
+            cache->putResponse(resp);
+        }
+        responses->put(resp);
+
     }
     /**
     *   \brief  retourne l'id du request en format QString
@@ -40,6 +50,7 @@ private:
     int idRequest=0;
     Request request;
     AbstractBuffer<Response>* responses;
+    ReaderWriterCache* cache;
     bool hasDebugLog;
 };
 

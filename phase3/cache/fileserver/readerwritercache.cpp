@@ -26,10 +26,15 @@ ReaderWriterCache::~ReaderWriterCache()
 *   \param response permet l'ajout au map
 */
 void ReaderWriterCache::putResponse(Response &response) {
+<<<<<<< Updated upstream
     lock.lockWriting();
         //pour chaque nouvelle requete on cree une struct avec le time courrant
 
     TimestampedResponse response_struct(response,timer->time);
+=======
+
+}
+>>>>>>> Stashed changes
 
     //l'ajout dans le cache
     //map prend string et TimestampedResponse donc on peut pas stockee la request instance on met le path

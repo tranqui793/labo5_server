@@ -23,6 +23,10 @@ protected:
 
     public:
         Condition();
+
+        // Test si il y des threads en attente sur la condition
+        bool notEmpty(){return nbWaiting;}
+
     private:
         QSemaphore waitingSem;
         int nbWaiting;
