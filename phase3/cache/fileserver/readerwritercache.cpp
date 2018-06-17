@@ -19,7 +19,6 @@ ReaderWriterCache::ReaderWriterCache(int invalidationDelaySec, int staleDelaySec
 ReaderWriterCache::~ReaderWriterCache()
 {
     timer->requestInterruption();
-    delete timer;
 }
 /**
 *   \brief
