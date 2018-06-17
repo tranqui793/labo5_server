@@ -20,7 +20,7 @@ Ensuite, on a compléter la fonction run de la classe interne InvalidationTimer 
 
 adapter code dispatcherthread:
 
-Afin d'adopter la partie requestdispatcherthread, on avait instancié un thread readwritecache et on le 
+Afin d'adapter la partie requestdispatcherthread, on avait instancié un thread readwritecache et on le passe au paramétre du chaque thread requestHandler.
 
 adapter code requesthandler:
 
