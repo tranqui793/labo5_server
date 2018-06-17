@@ -163,6 +163,9 @@ public:
     */
     ~ThreadPool(){
 
+        // reveille les threads en attente
+        waitWorker->wakeAll();
+
         // Termine chaque thread proprement
         for(Worker* w : workers)
             w->requestInterruption();
